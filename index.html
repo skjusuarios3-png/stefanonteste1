@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stefanon | Moda Feminina</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS GERAIS & PALETA --- */
+        :root {
+            --rosa-suave: #f9f0f2;
+            --rosa-destaque: #d4a3b3;
+            --preto-elegante: #1a1a1a;
+            --cinza-claro: #fcfcfc;
+            --texto: #4a4a4a;
+            --sombra-suave: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --transicao: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cinza-claro);
+            color: var(--texto);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .brand-name {
+            font-family: 'Playfair Display', serif;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- POPUP INICIAL --- */
+        .overlay-inicial {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-inicial {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .btn-fechar-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none; border: none;
+            font-size: 14px; color: #999;
+            cursor: pointer;
+        }
+
+        .login-field {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            border: 1px solid #e0e0e0; border-radius: 8px;
+            outline: none; font-family: inherit;
+        }
+
+        .btn-login-submit {
+            width: 100%; padding: 12px;
+            background: var(--preto-elegante); color: white;
+            border: none; border-radius: 8px; font-weight: 600;
+            cursor: pointer; text-transform: uppercase;
+            font-size: 12px; letter-spacing: 1px;
+            transition: var(--transicao);
+        }
+
+        .btn-login-submit:hover { background: var(--rosa-destaque); }
+
+        .unidades-container { display: flex; gap: 15px; margin-top: 15px; }
+
+        .btn-unidade {
+            flex: 1; padding: 12px; background: var(--rosa-suave);
+            border: none; border-radius: 8px; cursor: pointer;
+            font-weight: 600; color: var(--preto-elegante);
+            transition: var(--transicao);
+        }
+
+        .btn-unidade:hover { background: var(--rosa-destaque); color: white; }
+
+        /* --- CABEÇALHO --- */
+        header {
+            background: white; padding: 20px 10%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 900;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .brand-name { font-size: 32px; font-weight: 600; color: var(--preto-elegante); }
+
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+
+        .nav-links a { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+
+        .nav-links a:hover { color: var(--rosa-destaque); }
+
+        .instagram-link {
+            background-color: var(--preto-elegante); color: white !important;
+            padding: 8px 18px; border-radius: 50px;
+        }
+
+        .cart-icon { font-size: 14px; cursor: pointer; font-weight: 600; background: var(--rosa-suave); padding: 8px 15px; border-radius: 20px; transition: var(--transicao); }
+        .cart-icon:hover { background: var(--rosa-destaque); color: white; }
+
+        /* --- SEÇÃO APRESENTAÇÃO / HISTÓRIA --- */
+        .apresentacao-section {
+            padding: 80px 15% 40px 15%;
+            text-align: center;
+            background: white;
+        }
+
+        .apresentacao-section h2 {
+            font-size: 36px;
+            color: var(--preto-elegante);
+            margin-bottom: 20px;
+        }
+
+        .apresentacao-section p {
+            font-size: 16px;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            line-height: 1.8;
+        }
+
+        .apresentacao-destaque {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--rosa-destaque);
+            font-size: 20px;
+            margin-top: 15px;
+        }
+
+        /* --- SEÇÃO CATÁLOGO (4 COLUNAS REDUZIDAS) --- */
+        .catalogo-section { padding: 40px 10% 60px 10%; }
+
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 40px; flex-wrap: wrap; gap: 20px;
+        }
+
+        .search-bar { max-width: 300px; width: 100%; }
+
+        .search-bar input {
+            width: 100%; padding: 12px 20px;
+            border: 1px solid #e0e0e0; border-radius: 50px;
+            outline: none; font-family: inherit;
+        }
+
+        /* Mudança para 4 colunas perfeitas e proporções menores */
+        .grid-produtos {
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 25px;
+        }
+
+        @media (max-width: 1024px) { .grid-produtos { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grid-produtos { grid-template-columns: 1fr; } }
+
+        .produto-card {
+            background: white; border-radius: 10px; overflow: hidden;
+            box-shadow: var(--sombra-suave); transition: var(--transicao);
+            display: flex; flex-direction: column;
+        }
+
+        .produto-card:hover { transform: translateY(-5px); }
+
+        /* Altura reduzida para enquadrar melhor as fotos menores */
+        .produto-img-container {
+            width: 100%; height: 290px; overflow: hidden; background: #f0f0f0;
+        }
+
+        .produto-img {
+            width: 100%; height: 100%; object-fit: cover; transition: var(--transicao);
+        }
+
+        .produto-card:hover .produto-img { transform: scale(1.04); }
+
+        .produto-info { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+
+        .produto-info h3 { font-size: 14px; color: var(--preto-elegante); margin-bottom: 5px; font-weight: 500; }
+
+        .produto-preco { font-weight: 600; color: var(--rosa-destaque); margin-bottom: 12px; font-size: 14px; }
+
+        .btn-comprar {
+            width: 100%; padding: 10px; background: transparent;
+            border: 1px solid var(--preto-elegante); border-radius: 4px;
+            text-transform: uppercase; font-size: 10px; font-weight: 600;
+            letter-spacing: 1px; cursor: pointer; transition: var(--transicao);
+        }
+
+        .produto-card:hover .btn-comprar { background: var(--preto-elegante); color: white; }
+
+        /* --- SEÇÃO ATENDENTES & UNIDADES --- */
+        .atendentes-section { background: var(--rosa-suave); padding: 60px 10%; text-align: center; }
+
+        .atendentes-section h2 { font-size: 32px; margin-bottom: 10px; }
+
+        .atendentes-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px; margin-top: 40px;
+        }
+
+        .atendente-card {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: var(--sombra-suave); border-top: 4px solid var(--rosa-destaque);
+        }
+
+        .atendente-card h3 { font-size: 20px; margin-bottom: 5px; }
+
+        .atendente-card .loja-sub { font-size: 13px; color: #888; margin-bottom: 15px; text-transform: uppercase; font-weight: 500; }
+
+        .btn-whatsapp-direto {
+            display: inline-block; background: #25d366; color: white;
+            padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 13px;
+            transition: var(--transicao); margin-top: 10px;
+        }
+
+        .btn-whatsapp-direto:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
+
+        .btn-maps-destaque {
+            display: inline-block; background: #4285F4; color: white;
+            padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 13px;
+            transition: var(--transicao); margin-top: 10px; margin-left: 5px;
+        }
+
+        .btn-maps-destaque:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(66,133,244,0.3); }
+
+        /* --- SEÇÃO CHECKOUT (CORRIGIDA E ENVELOPADA) --- */
+        .checkout-section { padding: 60px 10%; max-width: 850px; margin: 0 auto; }
+
+        /* Garante que o container se ajuste sem vazar conteúdo interno */
+        .checkout-container {
+            background: white; padding: 40px; border-radius: 12px;
+            box-shadow: var(--sombra-suave); border: 1px solid #eee;
+            display: flex; flex-direction: column; width: 100%; overflow: hidden;
+        }
+
+        @media (max-width: 500px) { .checkout-container { padding: 20px; } }
+
+        .checkout-section h2 { font-size: 32px; text-align: center; margin-bottom: 30px; }
+
+        .lista-carrinho-revisao { margin-bottom: 25px; border-bottom: 2px dashed #eee; padding-bottom: 20px; }
+
+        .item-carrinho-revisao {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px;
+        }
+
+        .btn-remover-item {
+            background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 14px; margin-left: 10px; transition: 0.2s;
+        }
+        .btn-remover-item:hover { transform: scale(1.15); }
+
+        .total-checkout { font-size: 20px; font-weight: 600; color: var(--preto-elegante); text-align: right; margin-bottom: 30px; }
+
+        /* Grid estruturado de formulário para evitar quebras inadequadas */
+        .form-checkout-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; 
+            width: 100%;
+        }
+
+        @media (max-width: 768px) { .form-checkout-grid { grid-template-columns: 1fr; } }
+
+        .checkout-group { display: flex; flex-direction: column; width: 100%; }
+        .checkout-group.full-width { grid-column: span 2; }
+        @media (max-width: 768px) { .checkout-group.full-width { grid-column: span 1; } }
+
+        .checkout-group label { font-size: 12px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; color: #555; }
+
+        .checkout-input, .checkout-select {
+            width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: inherit; outline: none; transition: 0.2s;
+        }
+        .checkout-input:focus, .checkout-select:focus { border-color: var(--rosa-destaque); }
+
+        /* Campos dinâmicos de endereço escondidos por padrão */
+        .campos-endereco-ocultos {
+            display: none; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; margin-top: 10px;
+        }
+        .campos-endereco-ocultos.active { display: grid; }
+
+        .btn-finalizar-pedido {
+            width: 100%; padding: 15px; background: #25d366; color: white;
+            border: none; border-radius: 8px; font-weight: 600; font-size: 15px;
+            text-transform: uppercase; cursor: pointer; transition: var(--transicao); margin-top: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-finalizar-pedido:hover { background: #21b855; }
+
+        /* --- FAQ --- */
+        .faq-section { background-color: white; padding: 80px 20%; }
+        @media (max-width: 768px) { .faq-section { padding: 60px 10%; } }
+
+        .faq-section h2 { text-align: center; font-size: 32px; margin-bottom: 40px; }
+
+        .faq-item { margin-bottom: 15px; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
+
+        .faq-question {
+            font-weight: 600; font-size: 15px; color: var(--preto-elegante);
+            padding: 18px 20px; background: #fafafa; display: flex;
+            justify-content: space-between; align-items: center; cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .faq-question:hover { background: var(--rosa-suave); }
+
+        .faq-answer {
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
+            background: white; padding: 0 20px; color: #666; font-size: 14px;
+        }
+
+        /* --- RODAPÉ --- */
+        footer { background-color: var(--preto-elegante); color: white; padding: 40px 10%; text-align: center; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <!-- PORTAL DE ENTRADA -->
+    <div class="overlay-inicial" id="overlayInicial">
+        <div class="modal-inicial">
+            <button type="button" class="btn-fechar-modal" onclick="destruirModal()">Agora não ×</button>
+            <h2 style="font-size: 28px; margin-bottom: 10px;">Stefanon</h2>
+            <p style="font-size: 14px; color:#666; margin-bottom: 20px;">Seja bem-vinda! Faça login ou selecione sua loja favorita para continuar.</p>
+            
+            <form onsubmit="event.preventDefault(); destruirModal();">
+                <input type="email" class="login-field" placeholder="Seu e-mail" required>
+                <input type="password" class="login-field" placeholder="Sua senha" required>
+                <button type="submit" class="btn-login-submit">Entrar e Acessar Site</button>
+            </form>
+            
+            <p style="margin: 15px 0 5px; font-weight: 600; font-size: 12px;">OU ESCOLHA UMA UNIDADE:</p>
+            <div class="unidades-container">
+                <button type="button" class="btn-unidade" onclick="selecionarLojaRapido('Centro')">Stefanon Centro</button>
+                <button type="button" class="btn-unidade" onclick="selecionarLojaRapido('Canaã')">Stefanon Canaã</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand-name">Stefanon</div>
+        <nav class="nav-links">
+            <a href="#sobre">A Marca</a>
+            <a href="#catalogo">Coleção</a>
+            <a href="#unidades">Unidades & Contatos</a>
+            <a href="#faq">Dúvidas</a>
+            <a href="https://www.instagram.com/stefanon_ipatinga/" target="_blank" class="instagram-link">Instagram</a>
+            <!-- Redirecionamento âncora direto para a seção de checkout -->
+            <div class="cart-icon" onclick="window.location.hash = '#checkout';">🛒 Sacola (<span id="cont-cart">0</span>)</div>
+        </nav>
+    </header>
+
+    <!-- APRESENTAÇÃO DA LOJA (CONTEÚDO DE REFERÊNCIA STEFANON) -->
+    <section class="apresentacao-section" id="sobre">
+        <h2>Curadoria, Elegância e Conexão</h2>
+        <p>
+            Nascida com o propósito de elevar a autoestima feminina, a <strong>Stefanon</strong> consolida-se como referência em moda premium em Ipatinga, Minas Gerais. Nós prezamos por um atendimento humanizado, peças com tecidos nobres e acabamentos de altíssima alfaiataria que traduzem sofisticação para o dia a dia e momentos marcantes.
+        </p>
+        <p>
+            Sob a direção e olhar cuidadoso de sua fundadora, nossa marca celebra a versatilidade da mulher contemporânea. Mais do que vender roupas, entregamos experiências personalizadas através de nossas lojas físicas e enviamos nossa curadoria exclusiva com carinho para **todo o território nacional**.
+        </p>
+        <div class="apresentacao-destaque">"Seu estilo, nossa curadoria. Sinta-se única."</div>
+    </section>
+
+    <!-- CATÁLOGO (12 ITENS EM GRID 3x4 MENOR) -->
+    <section class="catalogo-section" id="catalogo">
+        <div class="section-header">
+            <h2>Nova Coleção Adulta</h2>
+            <div class="search-bar">
+                <input type="text" id="campoBusca" oninput="filtrarProdutos()" placeholder="Buscar por peça (ex: Vestido, Calça)...">
+            </div>
+        </div>
+
+        <div class="grid-produtos" id="gridProdutos">
+            <!-- Linha 1 -->
+            <div class="produto-card" data-nome="Vestido Elegance Midi">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Vestido Elegance Midi</h3><div class="produto-preco">R$ 289,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Vestido Elegance Midi', 289.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Blazer Linho Fino">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Blazer Linho Fino</h3><div class="produto-preco">R$ 349,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Blazer Linho Fino', 349.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Camisa Seda Clássica">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Camisa Seda Clássica</h3><div class="produto-preco">R$ 219,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Camisa Seda Clássica', 219.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Pantalona Premium">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Pantalona Premium</h3><div class="produto-preco">R$ 199,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Pantalona Premium', 199.90)">Adicionar</button></div>
+            </div>
+
+            <!-- Linha 2 -->
+            <div class="produto-card" data-nome="Blusa Tricot Fino">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Blusa Tricot Fino</h3><div class="produto-preco">R$ 179,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Blusa Tricot Fino', 179.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Saia Plissada Noite">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Saia Plissada Noite</h3><div class="produto-preco">R$ 249,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Saia Plissada Noite', 249.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Macacão Soft Minimal">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1551854838-212c50b4c184?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Macacão Soft Minimal</h3><div class="produto-preco">R$ 319,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Macacão Soft Minimal', 319.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Conjunto Modern Urbano">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Conjunto Modern Urbano</h3><div class="produto-preco">R$ 299,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Conjunto Modern Urbano', 299.90)">Adicionar</button></div>
+            </div>
+
+            <!-- Linha 3 (Novos itens adicionados para fechar o grid 3x4) -->
+            <div class="produto-card" data-nome="Vestido Ateliê Linen">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Vestido Ateliê Linen</h3><div class="produto-preco">R$ 369,00</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Vestido Ateliê Linen', 369.00)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Cropped Alfaiataria Nude">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Cropped Alfaiataria Nude</h3><div class="produto-preco">R$ 129,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Cropped Alfaiataria Nude', 129.90)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Casaco Trench Minimal">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Casaco Trench Minimal</h3><div class="produto-preco">R$ 429,00</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Casaco Trench Minimal', 429.00)">Adicionar</button></div>
+            </div>
+            <div class="produto-card" data-nome="Tshirt Algodão Egípcio">
+                <div class="produto-img-container"><img class="produto-img" src="https://images.unsplash.com/photo-1554568218-0f1715e72254?w=400&q=80" alt="Peça"></div>
+                <div class="produto-info"><h3>Tshirt Algodão Egípcio</h3><div class="produto-preco">R$ 98,90</div><button class="btn-comprar" onclick="adicionarAoCarrinho('Tshirt Algodão Egípcio', 98.90)">Adicionar</button></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UNIDADES E ATENDENTES SEPARADAS EXPLICITAMENTE -->
+    <section class="atendentes-section" id="unidades">
+        <h2>Canais Diretos de Atendimento</h2>
+        <p>Converse especificamente com a consultora de vendas responsável pela filial de sua escolha.</p>
+        
+        <div class="atendentes-grid">
+            <!-- Unidade Centro -->
+            <div class="atendente-card">
+                <h3>Stefanon Centro</h3>
+                <div class="loja-sub">R. Vinte e Oito de Abril, 85 - Centro, Ipatinga - MG</div>
+                <p style="font-size: 14px; color:#555; margin-bottom:15px;">Fale diretamente com a equipe do Centro para vendas exclusivas e retirada agendada nesta unidade.</p>
+                <a href="https://wa.me/5531999991111?text=Olá!+Gostaria+de+falar+com+a+atendente+da+loja+do+Centro." target="_blank" class="btn-whatsapp-direto">💬 Atendente do Centro</a>
+                <a href="https://maps.google.com/?q=R.+Vinte+e+Oito+de+Abril,+85+-+Centro,+Ipatinga+-+MG" target="_blank" class="btn-maps-destaque">📍 Abrir Google Maps</a>
+            </div>
+
+            <!-- Unidade Canaã -->
+            <div class="atendente-card">
+                <h3>Stefanon Canaã</h3>
+                <div class="loja-sub">Av. Selim José de Sales, 883 - Canaã, Ipatinga - MG</div>
+                <p style="font-size: 14px; color:#555; margin-bottom:15px;">Fale diretamente com a equipe do Canaã para conferir a disponibilidade física de peças no estoque local.</p>
+                <a href="https://wa.me/5531999992222?text=Olá!+Gostaria+de+falar+com+a+atendente+da+loja+do+Canaã." target="_blank" class="btn-whatsapp-direto">💬 Atendente do Canaã</a>
+                <a href="https://maps.google.com/?q=Av.+Selim+José+de+Sales,+883+-+Canaã,+Ipatinga+-+MG" target="_blank" class="btn-maps-destaque">📍 Abrir Google Maps</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHECKOUT / FINALIZAR PEDIDO (TOTALMENTE AJUSTADO) -->
+    <section class="checkout-section" id="checkout">
+        <h2>Sua Sacola de Compras</h2>
+        <div class="checkout-container">
+            <h3 style="margin-bottom: 20px; font-size: 18px; font-weight: 600;">1. Itens Selecionados</h3>
+            <div class="lista-carrinho-revisao" id="itensRevisao">
+                <p style="color: #888; font-style: italic;">Sua sacola está vazia atualmente.</p>
+            </div>
+            <div class="total-checkout">Total do Pedido: R$ <span id="valorTotalCheckout">0,00</span></div>
+
+            <h3 style="margin-bottom: 20px; font-size: 18px; font-weight: 600; border-top: 1px solid #eee; padding-top:20px;">2. Informações de Envio e Pagamento</h3>
+            <form onsubmit="finalizarPedidoEEnviar(event)">
+                <div class="form-checkout-grid">
+                    <div class="checkout-group">
+                        <label>Nome Completo</label>
+                        <input type="text" class="checkout-input" placeholder="Seu nome" required>
+                    </div>
+                    <div class="checkout-group">
+                        <label>WhatsApp para Contato</label>
+                        <input type="tel" class="checkout-input" placeholder="(31) 99999-0000" required>
+                    </div>
+                    
+                    <div class="checkout-group full-width">
+                        <label>Método de Entrega</label>
+                        <select class="checkout-select" id="metodoEntrega" onchange="alternarCamposEnvio()" required>
+                            <option value="Retirada Centro">Retirar na Loja - Unidade Centro (R. 28 de Abril)</option>
+                            <option value="Retirada Canaã">Retirar na Loja - Unidade Canaã (Av. Selim José de Sales)</option>
+                            <option value="Envio Nacional">Receber em Casa - Envio para Todo o Brasil (Correios)</option>
+                        </select>
+                    </div>
+
+                    <!-- Campos de Endereço Ocultos Dinâmicos -->
+                    <div class="campos-endereco-ocultos full-width" id="blocoEndereco">
+                        <div class="checkout-group" style="grid-column: span 2;">
+                            <label>Endereço Residencial (Rua, Número, Apto)</label>
+                            <input type="text" class="checkout-input" id="campoRua" placeholder="Ex: Av. Brasil, 120, Apto 201">
+                        </div>
+                        <div class="checkout-group">
+                            <label>Bairro e Cidade</label>
+                            <input type="text" class="checkout-input" id="campoCidade" placeholder="Ex: Centro - Ipatinga/MG">
+                        </div>
+                        <div class="checkout-group">
+                            <label>CEP</label>
+                            <input type="text" class="checkout-input" id="campoCep" placeholder="35160-000">
+                        </div>
+                    </div>
+
+                    <div class="checkout-group full-width">
+                        <label>Forma de Pagamento Preferida</label>
+                        <select class="checkout-select" id="metodoPagamento" required>
+                            <option value="PIX">PIX Bancário (Gera 5% de desconto direto)</option>
+                            <option value="Cartão">Cartão de Crédito / Débito (Link de Pagamento ou na Retirada)</option>
+                            <option value="Dinheiro">Dinheiro Físico</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-finalizar-pedido">Confirmar e Enviar Pedido via WhatsApp</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <h2>Perguntas Frequentes</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Quais as formas de pagamento aceitas? <span>▼</span></div>
+            <div class="faq-answer"><p style="padding: 15px 0;">Aceitamos cartões de crédito/débito com parcelamento facilitado, PIX e dinheiro diretamente nas nossas lojas físicas na hora da retirada ou via link de pagamento seguro para envios.</p></div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Como funciona o envio para outras cidades? <span>▼</span></div>
+            <div class="faq-answer"><p style="padding: 15px 0;">Nós realizamos envios para todo o Brasil! Ao selecionar a opção de entrega em casa, nossa consultora calculará a melhor taxa via Correios (SEDEX/PAC) ou transportadora parceira e adicionará ao seu pedido.</p></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Qual a política de trocas? <span>▼</span></div>
+            <div class="faq-answer"><p style="padding: 15px 0;">As trocas podem ser feitas em até 30 dias em qualquer uma das filiais físicas de Ipatinga ou enviadas de volta pelos Correios, desde que a peça mantenha a etiqueta fixada intacta.</p></div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2026 Stefanon Ipatinga. Curadoria exclusiva e paixão por vestir bem. Todos os direitos reservados.
+    </footer>
+
+    <!-- LOGICA JAVASCRIPT REESTRUTURADA -->
+    <script>
+        let carrinho = [];
+
+        function destruirModal() {
+            var modal = document.getElementById('overlayInicial');
+            if (modal) modal.remove();
+        }
+
+        function selecionarLojaRapido(loja) {
+            destruirModal();
+            window.location.hash = '#unidades';
+        }
+
+        // Sistema dinâmico de adição
+        function adicionarAoCarrinho(nome, preco) {
+            carrinho.push({ nome: nome, preco: preco });
+            atualizarInterfaceSacola();
+        }
+
+        // Sistema de REMOÇÃO de itens solicitado
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarInterfaceSacola();
+        }
+
+        // Sincroniza contador superior e painel do checkout
+        function atualizarInterfaceSacola() {
+            document.getElementById('cont-cart').innerText = carrinho.length;
+            
+            const container = document.getElementById('itensRevisao');
+            const totalSpan = document.getElementById('valorTotalCheckout');
+            
+            if (carrinho.length === 0) {
+                container.innerHTML = `<p style="color: #888; font-style: italic;">Sua sacola está vazia atualmente.</p>`;
+                totalSpan.innerText = "0,00";
+                return;
+            }
+
+            let html = "";
+            let total = 0;
+            
+            carrinho.forEach((item, index) => {
+                html += `
+                    <div class="item-carrinho-revisao">
+                        <span>👗 ${item.nome} - <strong>R$ ${item.preco.toFixed(2).replace('.', ',')}</strong></span>
+                        <button type="button" class="btn-remover-item" onclick="removerDoCarrinho(${index})">❌</button>
+                    </div>
+                `;
+                total += item.preco;
+            });
+
+            container.innerHTML = html;
+            totalSpan.innerText = total.toFixed(2).replace('.', ',');
+        }
+
+        // Controle dinâmico para exibir ou ocultar campos de entrega domiciliar
+        function alternarCamposEnvio() {
+            const escolha = document.getElementById('metodoEntrega').value;
+            const blocoEndereco = document.getElementById('blocoEndereco');
+            const campoRua = document.getElementById('campoRua');
+            const campoCidade = document.getElementById('campoCidade');
+            const campoCep = document.getElementById('campoCep');
+
+            if (escolha === 'Envio Nacional') {
+                blocoEndereco.classList.add('active');
+                campoRua.required = true;
+                campoCidade.required = true;
+                campoCep.required = true;
+            } else {
+                blocoEndereco.classList.remove('active');
+                campoRua.required = false;
+                campoCidade.required = false;
+                campoCep.required = false;
+            }
+        }
+
+        // Sistema de filtragem e busca no catálogo
+        function filtrarProdutos() {
+            const busca = document.getElementById('campoBusca').value.toLowerCase();
+            const cards = document.querySelectorAll('.produto-card');
+
+            cards.forEach(card => {
+                const nomeProduto = card.getAttribute('data-nome').toLowerCase();
+                if (nomeProduto.includes(busca)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        // FAQ sanfona
+        function toggleFaq(elemento) {
+            const resposta = elemento.nextElementSibling;
+            const seta = elemento.querySelector('span');
+            
+            if (resposta.style.maxHeight && resposta.style.maxHeight !== "0px") {
+                resposta.style.maxHeight = "0px";
+                seta.innerText = "▼";
+            } else {
+                resposta.style.maxHeight = resposta.scrollHeight + "px";
+                seta.innerText = "▲";
+            }
+        }
+
+        // Finaliza o pedido e limpa a sacola
+        function finalizarPedidoEEnviar(event) {
+            event.preventDefault();
+            if (carrinho.length === 0) {
+                alert("Sua sacola está vazia! Escolha suas peças antes de concluir.");
+                return;
+            }
+
+            const entrega = document.getElementById('metodoEntrega').value;
+            const pagamento = document.getElementById('metodoPagamento').value;
+
+            alert(`Pedido Confirmado!\n\nOpção escolhida: ${entrega}\nForma de Pagamento: ${pagamento}\n\nUma de nossas atendentes entrará em contato via WhatsApp para finalizar detalhes e o envio!`);
+            
+            carrinho = [];
+            atualizarInterfaceSacola();
+            window.location.hash = '#catalogo';
+        }
+    </script>
+</body>
+</html>
